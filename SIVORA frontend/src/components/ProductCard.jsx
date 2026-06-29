@@ -45,11 +45,30 @@ export default function ProductCard({ product, wishlist = [] }) {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const img = product?.image
-    ? product.image.startsWith("http")
+const getImage = () => {
+  // Case 1: product has direct image
+  if (product?.image) {
+    return product.image.startsWith("http")
       ? product.image
-      : `http://127.0.0.1:8000/storage/${product.image}`
-    : PH;
+      : `http://127.0.0.1:8000/storage/${product.image}`;
+  }
+
+  // Case 2: product has images array
+  if (product?.images && product.images.length > 0) {
+    const image = product.images[0]?.image;
+
+    if (image) {
+      return image.startsWith("http")
+        ? image
+        : `http://127.0.0.1:8000/storage/${image}`;
+    }
+  }
+
+  // Case 3: fallback
+  return PH;
+};
+
+const img = getImage();
 
   const handleCart = async (e) => {
     e.preventDefault();
@@ -108,8 +127,9 @@ export default function ProductCard({ product, wishlist = [] }) {
     <Link to={`/products/${product.id}`} className="group block">
       <div className="relative overflow-hidden bg-sand aspect-[3/4] mb-3">
         <img
-          src={img}
-          alt={product?.name}
+  key={img}
+  src={img}
+  alt={product?.name || "Product"}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           onError={(e) => {
             e.target.src = PH;
