@@ -50,7 +50,7 @@ const getImage = () => {
   if (product?.image) {
     return product.image.startsWith("http")
       ? product.image
-      : `http://127.0.0.1:8000/storage/${product.image}`;
+      : `${import.meta.env.VITE_STORAGE_URL}/${product.image}`;
   }
 
   // Case 2: product has images array
@@ -60,7 +60,7 @@ const getImage = () => {
     if (image) {
       return image.startsWith("http")
         ? image
-        : `http://127.0.0.1:8000/storage/${image}`;
+        : `${import.meta.env.VITE_STORAGE_URL}/${image}`;
     }
   }
 

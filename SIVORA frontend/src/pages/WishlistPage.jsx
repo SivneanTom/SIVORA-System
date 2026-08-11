@@ -58,8 +58,14 @@ export default function WishlistPage() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {list.map(item => {
             const product = item.product || item
-            const imgUrl = product?.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000/storage/${product.image}`) : PH
-            return (
+          const imgUrl = product?.image
+            ? (
+                product.image.startsWith('http')
+                  ? product.image
+                  : `${import.meta.env.VITE_STORAGE_URL}/${product.image}`
+              )
+            : PH           
+             return (
               <div key={item.id} className="group">
                 <div className="relative aspect-[3/4] bg-sand overflow-hidden mb-3">
                   <Link to={`/products/${product?.id}`}>

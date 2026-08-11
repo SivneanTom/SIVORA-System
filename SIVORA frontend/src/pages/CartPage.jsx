@@ -52,8 +52,12 @@ export default function CartPage() {
           {cart.map(item => {
             const product = item.product || item
             const imgUrl = product?.image
-              ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000/storage/${product.image}`)
-              : PH
+            ? (
+                product.image.startsWith('http')
+                  ? product.image
+                  : `${import.meta.env.VITE_STORAGE_URL}/${product.image}`
+              )
+            : PH
             const price = parseFloat(product?.price || 0)
             const lineTotal = price * (item.quantity || 1)
 

@@ -44,10 +44,10 @@ export default function ProductDetailPage() {
       );
   }, [id]);
 
-  const img = product?.image
+    const img = product?.image
     ? product.image.startsWith("http")
       ? product.image
-      : `http://127.0.0.1:8000/storage/${product.image}`
+      : `${import.meta.env.VITE_STORAGE_URL}/${product.image}`
     : PH;
 
   const handleCart = async () => {

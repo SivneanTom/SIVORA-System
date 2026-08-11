@@ -144,9 +144,16 @@ export default function AdminProducts() {
           </thead>
           <tbody>
             {filtered.map((product) => {
-              const imgUrl = product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000/storage/${product.image}`) : 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=80&auto=format&fit=crop';
-              const categoryName = categories.find((c) => String(c.id) === String(product.category || product.category_id))?.name || product.category || '—';
-              return (
+          const imgUrl = product.image
+          ? (
+              product.image.startsWith('http')
+                ? product.image
+                : `${import.meta.env.VITE_STORAGE_URL}/${product.image}`
+            )
+          : 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=80&auto=format&fit=crop';     
+                 
+          const categoryName = categories.find((c) => String(c.id) === String(product.category || product.category_id))?.name || product.category || '—';
+                      return (
                 <tr key={product.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3 flex items-center gap-3">
                     <img src={imgUrl} alt={product.name} className="w-10 h-12 object-cover bg-sand flex-shrink-0" onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=80'; }}/>
