@@ -34,14 +34,42 @@ export default function ProductDetailPage() {
       .then((r) => setProduct(r.data?.data || r.data))
       .finally(() => setLoading(false));
     productAPI
-      .getAll()
-      .then((r) =>
-        setRelated(
-          (r.data?.data || r.data || [])
-            .filter((p) => p.id !== +id)
-            .slice(0, 4),
-        ),
+  .getAll()
+  .then((response) => {
+    const rawProducts =
+      response.data?.data ||
+      response.data ||
+      [];
+
+    const uniqueProducts =
+      Array.from(
+        new Map(
+          rawProducts.map((product) => [
+            String(product.id),
+            product,
+          ]),
+        ).values(),
       );
+
+    const relatedProducts =
+      uniqueProducts
+        .filter(
+          (product) =>
+            String(product.id) !==
+            String(id),
+        )
+        .slice(0, 4);
+
+    setRelated(relatedProducts);
+  })
+  .catch((error) => {
+    console.error(
+      "Related products loading error:",
+      error,
+    );
+
+    setRelated([]);
+  });
   }, [id]);
 
     const img = product?.image

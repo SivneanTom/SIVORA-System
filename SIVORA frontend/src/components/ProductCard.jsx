@@ -46,25 +46,33 @@ export default function ProductCard({ product, wishlist = [] }) {
   const navigate = useNavigate();
 
 const getImage = () => {
-  // Case 1: product has direct image
+  const storageUrl =
+    import.meta.env.VITE_STORAGE_URL;
+
   if (product?.image) {
-    return product.image.startsWith("http")
-      ? product.image
-      : `${import.meta.env.VITE_STORAGE_URL}/${product.image}`;
+    if (product.image.startsWith("http")) {
+      return product.image;
+    }
+
+    return `${storageUrl}/${product.image}`;
   }
 
-  // Case 2: product has images array
-  if (product?.images && product.images.length > 0) {
-    const image = product.images[0]?.image;
+  if (
+    Array.isArray(product?.images) &&
+    product.images.length > 0
+  ) {
+    const image =
+      product.images[0]?.image;
 
     if (image) {
-      return image.startsWith("http")
-        ? image
-        : `${import.meta.env.VITE_STORAGE_URL}/${image}`;
+      if (image.startsWith("http")) {
+        return image;
+      }
+
+      return `${storageUrl}/${image}`;
     }
   }
 
-  // Case 3: fallback
   return PH;
 };
 
